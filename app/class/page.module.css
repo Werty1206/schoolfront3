@@ -1,0 +1,51 @@
+.sec{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.classes{
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    background-color: gray;
+    margin-top: 30px;
+    border-radius: 24px;
+    padding: 20px;
+    column-gap: 20px;
+    row-gap: 20px;
+
+}
+.class__num{
+    width: 85%;
+    margin-top: 20px;
+}
+.user{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+    height: 200px;
+    background-color: rgb(253, 238, 210);
+    border-radius: 12px;
+    padding: 10px;
+    color: black;
+}
+.user__name{
+    display: flex;
+    margin: 2px;
+}
+.user__lastname{
+    display: flex;
+    margin: 2px;
+}
+.user__mark{
+    display: flex;
+    margin: 2px;
+}
+.user__png{
+    display: flex;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+}
