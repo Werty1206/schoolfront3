@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://127.0.0.1:5000'
+export const BASE_URL = 'http://194.87.161.188:5000'
 
 export const endpoints = {
   auth: `${BASE_URL}/users/auth`,

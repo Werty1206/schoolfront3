@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link';
-import Styles from './Header.module.css';
+import Styles from './header.module.css';
 import { useEffect } from 'react';
 import { useAvatar } from '@/app/context/avatarContext'; // Убедитесь, что путь правильный
 
