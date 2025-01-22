@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Styles from './page.module.css';
 import { useEffect, useState } from 'react';
-import { endpoints } from '../../api/config';
+import { BASE_URL, endpoints } from '../../api/config';
 
 export default function Home(props) {
     const [work, setWork] = useState({});
@@ -34,6 +34,7 @@ export default function Home(props) {
 
                 const data = await response.json();
                 setWork(data);
+                console.log(data)
 
             } catch (error) {
                 console.error('Error fetching works:', error);
@@ -52,7 +53,11 @@ export default function Home(props) {
         const solvedTasksMass = work.tasks.map((task, index) => {
             const ans = document.getElementById(`ans:${index + 1}`).value;
             const fileInput = document.getElementById(`file:${index + 1}`);
-            const solvedTaskImg = fileInput.files[0]; // Получаем файл из input
+            let solvedTaskImg = null;
+            if(fileInput !== null){
+                solvedTaskImg = fileInput.files[0]; // Получаем файл из input
+            }
+            console.log(solvedTaskImg)
 
             if (!ans) {
                 console.error(`Task ${index + 1} is missing an answer.`);
@@ -65,6 +70,7 @@ export default function Home(props) {
             if (solvedTaskImg) {
                 formData.append(`solved_tasks_mass[${index}][solved_task_img]`, solvedTaskImg);
             }
+            console.log(solvedTaskImg)
 
             return {
                 task_id: task.task_id,
@@ -76,6 +82,8 @@ export default function Home(props) {
             console.error('No tasks were solved.');
             return;
         }
+
+        
 
         formData.append('final_grade', -1);
         formData.append('total_score', 0);
@@ -93,9 +101,7 @@ export default function Home(props) {
                 const errorText = await response.text();
                 throw new Error(`Failed to submit solved assignment: ${response.status} ${errorText}`);
             }
-
             console.log('Assignment submitted successfully');
-
         } catch (error) {
             console.error('Error submitting solved assignment:', error);
         }
@@ -116,7 +122,7 @@ export default function Home(props) {
                                 </div>
                                 <div className={Styles.num__case}>
                                     <p className={Styles.case__p}>{num.task_text}</p>
-                                    <img src='../imges/1.png' className={Styles.case__img} alt='' />
+                                    <img src={`${BASE_URL}/uploads/assignments/${work.assignment_id}--${num.task_id}--${num.task_img}`} className={Styles.case__img} alt='' />
                                 </div>
                                 {num.detailed_ans === "true" && (
                                     <p className={Styles.ans__sol}>Прикрепите файл с решением, т.к. это номер с развернутым ответом</p>

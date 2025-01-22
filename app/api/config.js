@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:5000'
+export const BASE_URL = 'http://127.0.0.1:5000'
 
 export const endpoints = {
   auth: `${BASE_URL}/users/auth`,
@@ -12,4 +12,6 @@ export const endpoints = {
   my_created_assignments: `${BASE_URL}/assignments/me`,
   get_check_assignment: `${BASE_URL}/assignment/check`,
   post_check_assignment: `${BASE_URL}/assignment/checked`,
+  create_user: `${BASE_URL}/users`,
+  change_user: `${BASE_URL}/users/me/update`
 }

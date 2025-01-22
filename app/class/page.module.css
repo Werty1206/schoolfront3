@@ -6,6 +6,9 @@
 }
 .classes{
     display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+    column-gap: 20px;
     flex-wrap: wrap;
     width: 90%;
     background-color: gray;
@@ -48,4 +51,26 @@
     border-radius: 50%;
     width: 90px;
     height: 90px;
+}
+.class{
+    display: flex;
+    row-gap: 20px;
+    column-gap: 33px;
+}
+.add__users{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    row-gap: 10px;
+}
+.work__sub{
+    margin-top: 20px
+}
+.submit{
+    display: flex;
+    background-color: black;
+    border-color: black;
+    border-radius: 12px;
+    padding: 3px;
+   
 }

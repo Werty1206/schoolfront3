@@ -69,6 +69,7 @@
     border-radius: 12px;
     column-gap: 5%;
     padding: 15px;
+    row-gap: 20px;
 }
 .work{
     display: flex;
@@ -218,6 +219,7 @@
     border-radius: 12px;
     column-gap: 5%;
     padding: 15px;
+    flex-wrap: wrap;
 }
 .work{
     display: flex;
