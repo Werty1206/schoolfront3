@@ -11,7 +11,7 @@ export const Header = () => {
         <header className={Styles.header}>
             <div className={Styles.header__apps}>
                 <Link className={Styles.app} href="/class">
-                    <img src='../imges/classes.jpg' className={Styles.app__img} alt='Классы'/>
+                    <img src='../imges/classes.png' className={Styles.app__img} alt='Классы'/>
                 </Link>
                 <Link className={Styles.app} href="/works">
                     <img src='../imges/works.png' className={Styles.app__img} alt='Работы'/>
@@ -22,7 +22,7 @@ export const Header = () => {
             </Link>}
             <div className={Styles.header__acc}>
                 <Link className={Styles.acc} href="/acc">
-                    <img src={avatar || '../imges/user.jpg'} className={Styles.acc__img} alt='Пользователь'/>
+                    <img src={avatar || '../imges/user.png'} className={Styles.acc__img} alt='Пользователь'/>
                 </Link>
             </div>
         </header>
