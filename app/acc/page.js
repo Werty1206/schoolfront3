@@ -273,6 +273,9 @@ export default function Home() {
                             <div className={Styles.info__name}>
                                 <p className={Styles.name}>{userData.user_class}</p>
                             </div>
+                            <Link onClick={exitAca} href='/'>
+                                <button>Выйти из аккаунта</button>
+                            </Link>
                         </div>
                     </div>
                     <div className={Styles.user__works}>

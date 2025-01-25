@@ -11,8 +11,17 @@ export const Main = () => {
     const [userClass, setUserClass] = useState("");
     const [password, setPassword] = useState("");
     
-    const router = useRouter();
+    // Состояние для создания пользователя
+    const [isCreatingUser , setIsCreatingUser ] = useState(false);
+    const [newUserLogin, setNewUserLogin] = useState("");
+    const [newUserPassword, setNewUserPassword] = useState("");
+    const [newUserName, setNewUserName] = useState("");
+    const [newUserLastName, setNewUserLastName] = useState("");
+    const [newUserPatronymic, setNewUserPatronymic] = useState("");
+    const [newUserIsTeacher, setNewUserIsTeacher] = useState(false);
 
+    const [newUserClass, setNewUserClass] = useState("");
+    const router = useRouter();
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -101,6 +110,42 @@ export const Main = () => {
         checkTokenAndRedirect();
     }, [router]);
 
+
+    const handleCreateUser  = async (e) => {
+        e.preventDefault();
+    
+        const formData = new FormData();
+        formData.append("login", newUserLogin);
+        formData.append("password_root", newUserPassword);
+        formData.append("first_name", newUserName);
+        formData.append("last_name", newUserLastName);
+        formData.append("patronymic", newUserPatronymic);
+        if (newUserIsTeacher){
+            formData.append("role", 'teacher');
+        }
+        formData.append("role", 'student');
+        formData.append("user_class", newUserClass);
+    
+        
+    
+        const response = await fetch(endpoints.create_teacher, {
+            method: 'POST',
+            body: formData, // Используем FormData
+        });
+    
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data)
+            alert(`Пользователь успешно создан: имя: ${data[0].first_name}, фамилия: ${data[0].second_name}, отчество: ${data[0].patronymic}, класс: ${data[0].user_class}, пароль: ${data[1]},`);
+            setIsCreatingUser(false); // Закрываем форму создания пользователя
+        } else {
+            alert('Ошибка при создании пользователя');
+        }
+    };
+    
+
+
+
     return (
         <>
             <div className={Styles.auth__div}>
@@ -116,6 +161,28 @@ export const Main = () => {
                     <button type="submit" className={Styles.auth__sub}>Авторизоваться</button>
                 </div>
             </form>
+
+            {/* Кнопка для создания пользователя */}
+            <button onClick={() => setIsCreatingUser (true)} className={Styles.createUserButton}>Создать пользователя</button>
+
+            {/* Форма для создания пользователя */}
+            {isCreatingUser  && (
+                <form className={Styles.auth} onSubmit={handleCreateUser }>
+                    <input className={Styles.auth__put} type="text" placeholder='Логин' value={newUserLogin} onChange={(e) => setNewUserLogin(e.target.value)} />
+                    <input className={Styles.auth__put} type="password" placeholder='Пароль' value={newUserPassword} onChange={(e) => setNewUserPassword(e.target.value)} />
+                    <input className={Styles.auth__put} type="text" placeholder='Имя' value={newUserName} onChange={(e) => setNewUserName(e.target.value)} />
+                    <input className={Styles.auth__put} type="text" placeholder='Фамилия' value={newUserLastName} onChange={(e) => setNewUserLastName(e.target.value)} />
+                    <input className={Styles.auth__put} type="text" placeholder='Отчество' value={newUserPatronymic} onChange={(e) => setNewUserPatronymic(e.target.value)} />
+                    <input className={Styles.auth__put} type="text" placeholder='Класс' value={newUserClass} onChange={(e) => setNewUserClass(e.target.value)} />
+                    <label>
+                        <input type="checkbox" checked={newUserIsTeacher} onChange={(e) => setNewUserIsTeacher(e.target.checked)} />
+                        Учитель
+                    </label>
+                    <div className={Styles.sub}>
+                        <button type="submit" className={Styles.auth__sub}>Отправить</button>
+                    </div>
+                </form>
+            )}
         </>
     );
 }

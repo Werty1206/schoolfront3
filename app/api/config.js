@@ -13,5 +13,6 @@ export const endpoints = {
   get_check_assignment: `${BASE_URL}/assignment/check`,
   post_check_assignment: `${BASE_URL}/assignment/checked`,
   create_user: `${BASE_URL}/users`,
-  change_user: `${BASE_URL}/users/me/update`
+  change_user: `${BASE_URL}/users/me/update`,
+  create_teacher: `${BASE_URL}/teachers`
 }
