@@ -88,7 +88,8 @@ export default function Home(props) {
         formData.append('final_grade', -1);
         formData.append('total_score', 0);
         formData.append('is_checked', false);
-
+        
+        console.log(formData.get(`solved_tasks_mass[0]`));
         try {
             const response = await fetch(endpoints.create_solved_assignment, {
                 method: 'POST',
@@ -96,7 +97,7 @@ export default function Home(props) {
                     'Authorization': `Bearer ${token}`
                 },
                 body: formData});
-
+            
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Failed to submit solved assignment: ${response.status} ${errorText}`);

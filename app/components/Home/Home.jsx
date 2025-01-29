@@ -19,7 +19,7 @@ export const Main = () => {
     const [newUserLastName, setNewUserLastName] = useState("");
     const [newUserPatronymic, setNewUserPatronymic] = useState("");
     const [newUserIsTeacher, setNewUserIsTeacher] = useState(false);
-
+    const [newUserPass, setNewUserPass] = useState("");
     const [newUserClass, setNewUserClass] = useState("");
     const router = useRouter();
     useEffect(() => {
@@ -120,6 +120,7 @@ export const Main = () => {
         formData.append("first_name", newUserName);
         formData.append("last_name", newUserLastName);
         formData.append("patronymic", newUserPatronymic);
+        formData.append("password", newUserPass)
         if (newUserIsTeacher){
             formData.append("role", 'teacher');
         }
@@ -174,6 +175,7 @@ export const Main = () => {
                     <input className={Styles.auth__put} type="text" placeholder='Фамилия' value={newUserLastName} onChange={(e) => setNewUserLastName(e.target.value)} />
                     <input className={Styles.auth__put} type="text" placeholder='Отчество' value={newUserPatronymic} onChange={(e) => setNewUserPatronymic(e.target.value)} />
                     <input className={Styles.auth__put} type="text" placeholder='Класс' value={newUserClass} onChange={(e) => setNewUserClass(e.target.value)} />
+                    <input className={Styles.auth__put} type="text" placeholder='Пароль ученика' value={newUserPass} onChange={(e) => setNewUserPass(e.target.value)} />
                     <label>
                         <input type="checkbox" checked={newUserIsTeacher} onChange={(e) => setNewUserIsTeacher(e.target.checked)} />
                         Учитель

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 export default function Home() {
     const [userClasses, setUserClasses] = useState([]);
     const [createUserBool, setCreateUserBool] = useState(false);
-    const [createUser , setCreateUser ] = useState({
+    const [createUser, setCreateUser] = useState({
         first_name: '',
         last_name: '',
         patronymic: '',
@@ -42,13 +42,13 @@ export default function Home() {
         };
         fetchUserData();
     }, []);
-    const isCreateUser = ( ) => {
+    const isCreateUser = () => {
         setCreateUserBool(!createUserBool);
-        
+
     };
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCreateUser ((prev) => ({
+        setCreateUser((prev) => ({
             ...prev,
             [name]: value
         }));
@@ -56,12 +56,12 @@ export default function Home() {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Предотвращаем перезагрузку страницы
         const formData = new FormData();
-        formData.append('first_name', createUser .first_name);
-        formData.append('last_name', createUser .last_name);
-        formData.append('patronymic', createUser .patronymic);
-        formData.append('user_class', createUser .user_class);
-        formData.append('password', createUser .password);
-        formData.append('role', createUser .role);
+        formData.append('first_name', createUser.first_name);
+        formData.append('last_name', createUser.last_name);
+        formData.append('patronymic', createUser.patronymic);
+        formData.append('user_class', createUser.user_class);
+        formData.append('password', createUser.password);
+        formData.append('role', createUser.role);
         // Если у вас есть предметы, вы можете добавить их в formData
         // createUser .subjects.forEach(subject => formData.append('subjects', subject));
         try {
@@ -91,14 +91,16 @@ export default function Home() {
                 {Array.isArray(userClasses) && userClasses.map((userClass, classIndex) => (
                     <div key={classIndex} className={Styles.class}>
                         <h2 className={Styles.class__name}>{userClass.class_name}</h2>
-                        {Array.isArray(userClass.students) && userClass.students.map((user) => (
-                            <Link key={user.user_id} className={Styles.user} href={`/acc_to_see/${user.user_id}`}>
-                                <img src='../imges/1.png' className={Styles.user__png} alt={`${user.first_name} ${user.last_name}`} />
-                                <p className={Styles.user__name}>{user.first_name}</p>
-                                <p className={Styles.user__lastname}>{user.last_name}</p>
-                                <p className={Styles.user__mark}>Средняя оценка: {user.average_grade}</p>
-                            </Link>
-                        ))}
+                        <div className={Styles.students_class}>
+                            {Array.isArray(userClass.students) && userClass.students.map((user) => (
+                                <Link key={user.user_id} className={Styles.user} href={`/acc_to_see/${user.user_id}`}>
+                                    <img src='../imges/1.png' className={Styles.user__png} alt={`${user.first_name} ${user.last_name}`} />
+                                    <p className={Styles.user__name}>{user.first_name}</p>
+                                    <p className={Styles.user__lastname}>{user.last_name}</p>
+                                    <p className={Styles.user__mark}>Средняя оценка: {user.average_grade}</p>
+                                </Link>
+                            ))}
+                        </div>
                         {localStorage.getItem('role') === 'teacher' && (
                             <div className={Styles.add__users}>
                                 <button>Добавить существующего ученика</button>
