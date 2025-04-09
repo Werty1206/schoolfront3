@@ -120,7 +120,7 @@ export default function Home(props) {
                                         {num.detailed_ans == "true" && (
                                             //num.solved_task_img?
                                             <div className={Styles.check__img}>
-                                                    <Link href={`${BASE_URL}/uploads/solved_assignments/${assignment.solved_assignment_id}--${num.solved_task_id}--${num.solved_task_img}`} className={Styles.img_check}><img src={`http://localhost:5000/uploads/solved_assignments/${assignment.solved_assignment_id}--${num.solved_task_id}--${num.solved_task_img}`} alt='' className={Styles.ans__img} /></Link>
+                                                    <Link href={`${BASE_URL}/uploads/solved_assignments/${assignment.solved_assignment_id}--${num.solved_task_id}--${num.solved_task_img}`} className={Styles.img_check}><img src='../imges/1.png' alt='' className={Styles.ans__img} /></Link>
                                                 <div className={Styles.check}>
                                                     <p className={Styles.check__p}>Введите кол-во баллов за решение</p>
                                                     <input className={Styles.txt__input} type="number" min="0" max="2" placeholder={0} id={`ans:${index}`}/>

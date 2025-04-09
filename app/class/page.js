@@ -1,5 +1,5 @@
 "use client";
-import { endpoints } from '@/app/api/config';
+import { endpoints, BASE_URL } from '@/app/api/config';
 import Link from 'next/link';
 import Styles from './page.module.css';
 import { useEffect, useState } from 'react';
@@ -94,11 +94,18 @@ export default function Home() {
                         <div className={Styles.students_class}>
                             {Array.isArray(userClass.students) && userClass.students.map((user) => (
                                 <Link key={user.user_id} className={Styles.user} href={`/acc_to_see/${user.user_id}`}>
-                                    <img src='../imges/1.png' className={Styles.user__png} alt={`${user.first_name} ${user.last_name}`} />
-                                    <p className={Styles.user__name}>{user.first_name}</p>
-                                    <p className={Styles.user__lastname}>{user.last_name}</p>
-                                    <p className={Styles.user__mark}>Средняя оценка: {user.average_grade}</p>
-                                </Link>
+                                <img
+                                    src={`${BASE_URL}/uploads/users/${user.avatar}`}
+                                    className={Styles.user__png}
+                                    alt={`${user.first_name} ${user.last_name}`}
+                                    onError={(e) => {
+                                        e.target.src = '../imges/user.png'; // Устанавливаем изображение по умолчанию
+                                    }}
+                                />
+                                <p className={Styles.user__name}>{user.first_name}</p>
+                                <p className={Styles.user__lastname}>{user.last_name}</p>
+                                <p className={Styles.user__mark}>Средняя оценка: {user.average_grade}</p>
+                            </Link>
                             ))}
                         </div>
                         {localStorage.getItem('role') === 'teacher' && (

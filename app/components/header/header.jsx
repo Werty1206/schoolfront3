@@ -22,7 +22,9 @@ export const Header = () => {
             </Link>}
             <div className={Styles.header__acc}>
                 <Link className={Styles.acc} href="/acc">
-                    <img src={avatar || '../imges/user.png'} className={Styles.acc__img} alt='Пользователь'/>
+                    <img src={avatar || '../imges/user.png'} className={Styles.acc__img} alt='Пользователь' onError={(e) => {
+                                        e.target.src = '../imges/user.png'; // Устанавливаем изображение по умолчанию
+                                    }}/>
                 </Link>
             </div>
         </header>

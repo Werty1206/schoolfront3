@@ -28,48 +28,57 @@ export default function Home() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const token = localStorage.getItem('token');
-
-        const formData = new FormData();
+        e.preventDefault(); // Предотвращаем стандартное поведение формы (например, перезагрузку страницы)
+    
+        const token = localStorage.getItem('token'); // Получаем токен из локального хранилища (для авторизации)
+    
+        const formData = new FormData(); // Создаем объект FormData для отправки данных на сервер
         
-        formData.append('title_work', titleWork);
-        formData.append('user_class', userClass);
-        formData.append('date', dueDate);
-        formData.append('subject', subject); // Добавлено поле subject
-
+        // Добавляем данные в FormData
+        formData.append('title_work', titleWork); // Название работы
+        formData.append('user_class', userClass); // Класс, для которого предназначена работа
+        formData.append('date', dueDate); // Срок выполнения работы
+        formData.append('subject', subject); // Предмет (добавлено новое поле)
+    
+        // Добавляем данные о каждом задании (вопросы) в FormData
         questions.forEach((q, index) => {
-            formData.append(`tasks[${index}][number_task]`, index + 1);
-            formData.append(`tasks[${index}][task]`, q.condition);
-            formData.append(`tasks[${index}][task_img]`, q.task_img || '');
-            formData.append(`tasks[${index}][correct_ans]`, q.answer);
-            formData.append(`tasks[${index}][detailed_ans]`, q.detailed_ans);
+            formData.append(`tasks[${index}][number_task]`, index + 1); // Номер задания
+            formData.append(`tasks[${index}][task]`, q.condition); // Условие задания
+            formData.append(`tasks[${index}][task_img]`, q.task_img || ''); // Изображение для задания (если есть)
+            formData.append(`tasks[${index}][correct_ans]`, q.answer); // Правильный ответ
+            formData.append(`tasks[${index}][detailed_ans]`, q.detailed_ans); // Подробное решение (если есть)
         });
-
+    
         try {
+            // Отправляем POST-запрос на сервер
             const response = await fetch(endpoints.assignments, {
-                method: 'POST',
+                method: 'POST', // Указываем метод запроса (POST)
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Добавляем токен в заголовок для авторизации
                 },
-                body: formData,
+                body: formData, // Передаем FormData в теле запроса
             });
-
+    
+            // Проверяем, успешен ли запрос
             if (!response.ok) {
+                // Если запрос неуспешен, получаем данные об ошибке
                 const errorData = await response.json();
-                alert(`Ошибка: ${errorData.error}`);
+                alert(`Ошибка: ${errorData.error}`); // Показываем сообщение об ошибке
             } else {
+                // Если запрос успешен, показываем сообщение об успешной отправке
                 alert('Работа успешно отправлена!');
-                setTitleWork('');
-                setQuestions([{ id: 1, condition: '', answer: '', task_img: null, detailed_ans: false }]);
-                setUserClass('');
-                setDueDate('');
-                setSubject(''); // Сбросить поле subject
+    
+                // Сбрасываем состояние формы
+                setTitleWork(''); // Очищаем поле названия работы
+                setQuestions([{ id: 1, condition: '', answer: '', task_img: null, detailed_ans: false }]); // Сбрасываем список вопросов
+                setUserClass(''); // Очищаем поле класса
+                setDueDate(''); // Очищаем поле срока выполнения
+                setSubject(''); // Очищаем поле предмета
             }
         } catch (error) {
+            // Если произошла ошибка при отправке запроса, показываем сообщение
             alert(`Произошла ошибка при отправке работы. Попробуйте еще раз.`);
-            console.log(error);
+            console.log(error); // Логируем ошибку в консоль для отладки
         }
     };
 

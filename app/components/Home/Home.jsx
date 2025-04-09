@@ -50,35 +50,41 @@ export const Main = () => {
     }, []);
 
     const handleAuth = async (e) => {
-        e.preventDefault();
-        const response = await fetch(endpoints.auth, {
-            method: 'POST',
+        e.preventDefault(); // Предотвращаем стандартное поведение формы 
+    
+        // Отправляем POST-запрос на сервер для авторизации
+        const response = await fetch(endpoints.auth, { // endpoints.auth — это URL для авторизации
+            method: 'POST', // Указываем метод запроса (POST)
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json', // Указываем, что данные отправляются в формате JSON
             },
-            body: JSON.stringify({
-                "first_name": name,
-                "last_name": lastName,
-                "patronymic": patronymic,
-                "user_class": userClass,
-                "password": password
+            body: JSON.stringify({ // Преобразуем объект с данными пользователя в JSON-строку
+                "first_name": name, // Имя пользователя
+                "last_name": lastName, // Фамилия пользователя
+                "patronymic": patronymic, // Отчество пользователя
+                "user_class": userClass, // Класс пользователя (например, 10 "Б")
+                "password": password // Пароль пользователя
             }),
         });
-
+    
+        // Получаем ответ от сервера и преобразуем его в JSON
         const data = await response.json();
+    
+        // Проверяем, есть ли в ответе токен (признак успешной авторизации)
         if (data.token) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('name', name);
-            localStorage.setItem('lastName', lastName);
-            localStorage.setItem('patronymic', patronymic);
-            localStorage.setItem('userClass', userClass);
-            localStorage.setItem('role', 'data');
-
-            alert('авторизация успешна');
-
-            router.push('/acc'); // Перенаправление на /acc после успешной авторизации
+            // Сохраняем токен и данные пользователя в локальном хранилище браузера
+            localStorage.setItem('token', data.token); // Токен для авторизации
+            localStorage.setItem('name', name); // Имя пользователя
+            localStorage.setItem('lastName', lastName); // Фамилия пользователя
+            localStorage.setItem('patronymic', patronymic); // Отчество пользователя
+            localStorage.setItem('userClass', userClass); // Класс пользователя
+            localStorage.setItem('role', 'data'); // Роль пользователя (в данном случае 'data')
+    
+            alert('Авторизация успешна'); // Показываем сообщение об успешной авторизации
+    
+            router.push('/acc'); // Перенаправляем пользователя на страницу /acc
         } else {
-            alert('авторизация не удалась');
+            alert('Авторизация не удалась'); // Показываем сообщение об ошибке авторизации
         }
     };
 

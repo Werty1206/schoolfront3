@@ -27,21 +27,15 @@ export default function Home(props) {
                     })
                 });
 
-                if (!response.ok) {
-                    console.error('Error fetching works:', response.statusText);
-                    return;
-                }
-
                 const data = await response.json();
                 setWork(data);
-                console.log(data)
 
             } catch (error) {
                 console.error('Error fetching works:', error);
             }
-        }
+        };
         fetchWork();
-    }, []);
+    }, [props.params.id]);
 
     const handleSubmit = async (e) => {
         const token = localStorage.getItem('token');
@@ -50,67 +44,44 @@ export default function Home(props) {
         const formData = new FormData();
         formData.append('assignment_id', props.params.id);
 
-        const solvedTasksMass = work.tasks.map((task, index) => {
-            const ans = document.getElementById(`ans:${index + 1}`).value;
-            const fileInput = document.getElementById(`file:${index + 1}`);
+        work.tasks.forEach((task, index) => {
+            const ans = document.getElementById(`ans:${index}`).value;
+            const fileInput = document.getElementById(`file:${index}`);
             let solvedTaskImg = null;
-            if(fileInput !== null){
-                solvedTaskImg = fileInput.files[0]; // Получаем файл из input
-            }
-            console.log(solvedTaskImg)
-
-            if (!ans) {
-                console.error(`Task ${index + 1} is missing an answer.`);
-                return null; // Пропускаем, если ответ не предоставлен
+            if (fileInput && fileInput.files[0]) {
+                solvedTaskImg = fileInput.files[0];
             }
 
-            // Добавляем данные задачи в FormData
-            formData.append(`solved_tasks_mass[${index}][task_id]`, task.task_id);
-            formData.append(`solved_tasks_mass[${index}][solved_task_ans]`, ans);
+            formData.append(`tasks[${index}][task_id]`, task.task_id);
+            formData.append(`tasks[${index}][solved_task_ans]`, ans);
             if (solvedTaskImg) {
-                formData.append(`solved_tasks_mass[${index}][solved_task_img]`, solvedTaskImg);
+                formData.append(`tasks[${index}][solved_task_img]`, solvedTaskImg);
             }
-            console.log(solvedTaskImg)
+        });
 
-            return {
-                task_id: task.task_id,
-                solved_task_ans: ans,
-                solved_task_img: solvedTaskImg ? solvedTaskImg.name : null,
-                score: 0 };
-        }).filter(Boolean); // Удаляем null элементы 
-        if (solvedTasksMass.length === 0) {
-            console.error('No tasks were solved.');
-            return;
-        }
-
-        
-
-        formData.append('final_grade', -1);
-        formData.append('total_score', 0);
-        formData.append('is_checked', false);
-        
-        console.log(formData.get(`solved_tasks_mass[0]`));
         try {
             const response = await fetch(endpoints.create_solved_assignment, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },
-                body: formData});
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Failed to submit solved assignment: ${response.status} ${errorText}`);
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('Работа успешно отправлена!');
+                window.location.href = '/profile';
+            } else {
+                alert('Ошибка при отправке работы');
             }
-            console.log('Assignment submitted successfully');
         } catch (error) {
             console.error('Error submitting solved assignment:', error);
         }
-    }
+    };
 
     return (
         <section className={Styles.section}>
-            {work.tasks ?
+            {work.tasks ? (
                 <form className={Styles.form} onSubmit={handleSubmit}>
                     <div className={Styles.work__name}>
                         <p className={Styles.work__name__p}>{work.title_work}</p>
@@ -123,25 +94,46 @@ export default function Home(props) {
                                 </div>
                                 <div className={Styles.num__case}>
                                     <p className={Styles.case__p}>{num.task_text}</p>
-                                    <img src={`${BASE_URL}/uploads/assignments/${work.assignment_id}--${num.task_id}--${num.task_img}`} className={Styles.case__img} alt='' />
+                                    {num.task_img && (
+                                        <img
+                                            src={`${BASE_URL}/uploads/assignments/${work.assignment_id}--${num.task_id}--${num.task_img}`}
+                                            className={Styles.case__img}
+                                            alt=""
+                                        />
+                                    )}
                                 </div>
                                 {num.detailed_ans === "true" && (
-                                    <p className={Styles.ans__sol}>Прикрепите файл с решением, т.к. это номер с развернутым ответом</p>
+                                    <p className={Styles.ans__sol}>Прикрепите файл с решением</p>
                                 )}
                                 <div className={Styles.num__ans}>
                                     {num.detailed_ans === "true" && (
-                                        <input type="file" className={Styles.ans__file} id={`file:${index + 1}`} />
+                                        <input 
+                                            type="file" 
+                                            className={Styles.ans__file} 
+                                            id={`file:${index}`} 
+                                            accept="image/*,.pdf"
+                                        />
                                     )}
-                                    <input type="text" placeholder='Ваш ответ' className={Styles.ans__txt} id={`ans:${index + 1}`} />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Ваш ответ" 
+                                        className={Styles.ans__txt} 
+                                        id={`ans:${index}`} 
+                                        required
+                                    />
                                 </div>
                             </div>
                         ))}
                     </div>
                     <div className={Styles.form__submit}>
-                        <input type="submit" className={Styles.submit} />
+                        <button type="submit" className={Styles.submit}>
+                            Отправить работу
+                        </button>
                     </div>
-                </form> : <></>
-            }
+                </form>
+            ) : (
+                <p>Загрузка задания...</p>
+            )}
         </section>
-    )
+    );
 }

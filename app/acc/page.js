@@ -149,7 +149,7 @@ export default function Home() {
     useEffect(() => {
         if (userData) {
             setShowAva(!showAva)
-            const newAvatarUrl = `${BASE_URL}/uploads/users/user:${userData.user_id}--${userData.avatar}`;
+            const newAvatarUrl = `${BASE_URL}/uploads/users/${userData.avatar}`;
             localStorage.setItem('ava', newAvatarUrl);
             setAvatar(newAvatarUrl);
         }
@@ -161,7 +161,9 @@ export default function Home() {
                 <div className={Styles.user}>
                     <div className={Styles.user__description}>
                         {showAva?<div className={Styles.user__img}>
-                            <img className={Styles.img__png} src={`${BASE_URL}/uploads/users/user:${userData.user_id}--${userData.avatar}`} />
+                            <img className={Styles.img__png} src={`${BASE_URL}/uploads/users/${userData.avatar}`} onError={(e) => {
+                                        e.target.src = '../imges/user.png'; // Устанавливаем изображение по умолчанию
+                                    }}/>
                         </div>:<div className={Styles.user__img}>
                             <img className={Styles.img__png} src='../imges/user.jpg' alt="User" />
                         </div>}
@@ -259,25 +261,46 @@ export default function Home() {
                 </div>
                 :
                 <div className={Styles.user}>
-                    <div className={Styles.user__description}>
-                        <div className={Styles.user__img}>
-                            <img className={Styles.img__png} src='../imges/user.jpg' alt="User" />
+                <div className={Styles.user__description}>
+                    {showAva?<div className={Styles.user__img}>
+                        <img className={Styles.img__png} src={`${BASE_URL}/uploads/users/${userData.avatar}`} onError={(e) => {
+                                    e.target.src = '../imges/user.png'; // Устанавливаем изображение по умолчанию
+                                }}/>
+                    </div>:<div className={Styles.user__img}>
+                        <img className={Styles.img__png} src='../imges/user.jpg' alt="User" />
+                    </div>}
+                    {showChangeBio ?
+                        <form onSubmit={handleSubmit}>
+                            <p>Фото профиля</p>
+                            <input name="avatar" placeholder='Фото профиля' onChange={handleChange} type="file"/>
+                            <input name="first_name" placeholder='Имя' onChange={handleChange}/>
+                            <input name="last_name" placeholder='Фамилия' onChange={handleChange}/>
+                            <input name="patronymic" placeholder='Отчество' onChange={handleChange}/>
+                            <input name="password" type="password" placeholder='Пароль' onChange={handleChange}/>
+                            <div className={Styles.work__sub}>
+                                <input className={Styles.submit} type="submit" value="Сохранить изменения" />
+                            </div>
+                        </form> :
+                        <></>}
+                    <div className={Styles.user__info}>
+                        <button onClick={handleChangeBio}>
+                            Изменить профиль
+                        </button>
+                        <div className={Styles.info__name}>
+                            <p className={Styles.name}>{userData.first_name}</p>
                         </div>
-                        <div className={Styles.user__info}>
-                            <div className={Styles.info__name}>
-                                <p className={Styles.name}>{userData.first_name}</p>
-                            </div>
-                            <div className={Styles.info__name}>
-                                <p className={Styles.name}>{userData.last_name}</p>
-                            </div>
-                            <div className={Styles.info__name}>
-                                <p className={Styles.name}>{userData.user_class}</p>
-                            </div>
-                            <Link onClick={exitAca} href='/'>
-                                <button>Выйти из аккаунта</button>
-                            </Link>
+                        <div className={Styles.info__name}>
+                            <p className={Styles.name}>{userData.last_name}</p>
                         </div>
+                        <div className={Styles.info__name}>
+                            <p className={Styles.name}>{userData.user_class}</p>
+                            
+                        </div>
+                        <Link onClick={exitAca} href='/'>
+                            <button>Выйти из аккаунта</button>
+                        </Link>
                     </div>
+                </div>
                     <div className={Styles.user__works}>
                         <p className={Styles.works__p}>Ваши работы</p>
                         <div className={Styles.works}>
